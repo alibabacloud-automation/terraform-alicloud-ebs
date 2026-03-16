@@ -121,3 +121,83 @@ When enabled (`enable_solution_instance = true`), this example creates:
 2. The dedicated block storage cluster requires significant resources and may incur costs
 3. Some features like replica groups require specific conditions to be met
 4. Review and adjust the configuration according to your specific requirements
+<!-- BEGIN_TF_DOCS -->
+## Requirements
+
+| Name | Version |
+|------|---------|
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.0 |
+| <a name="requirement_alicloud"></a> [alicloud](#requirement\_alicloud) | >= 1.195.0 |
+
+## Providers
+
+| Name | Version |
+|------|---------|
+| <a name="provider_alicloud"></a> [alicloud](#provider\_alicloud) | 1.272.1 |
+
+## Modules
+
+| Name | Source | Version |
+|------|--------|---------|
+| <a name="module_ebs"></a> [ebs](#module\_ebs) | ../../ | n/a |
+
+## Resources
+
+| Name | Type |
+|------|------|
+| [alicloud_ecs_disk.default](https://registry.terraform.io/providers/aliyun/alicloud/latest/docs/resources/ecs_disk) | resource |
+| [alicloud_ecs_disk.destination](https://registry.terraform.io/providers/aliyun/alicloud/latest/docs/resources/ecs_disk) | resource |
+| [alicloud_ebs_regions.default](https://registry.terraform.io/providers/aliyun/alicloud/latest/docs/data-sources/ebs_regions) | data source |
+| [alicloud_regions.current](https://registry.terraform.io/providers/aliyun/alicloud/latest/docs/data-sources/regions) | data source |
+| [alicloud_resource_manager_resource_groups.default](https://registry.terraform.io/providers/aliyun/alicloud/latest/docs/data-sources/resource_manager_resource_groups) | data source |
+
+## Inputs
+
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|:--------:|
+| <a name="input_create_cluster"></a> [create\_cluster](#input\_create\_cluster) | Whether to create the EBS dedicated block storage cluster (requires valid capacity and zone that supports EBS clusters) | `bool` | `false` | no |
+| <a name="input_disk_replica_pair_bandwidth"></a> [disk\_replica\_pair\_bandwidth](#input\_disk\_replica\_pair\_bandwidth) | The bandwidth for the replica pair (must be one of 0, 10240, 20480, 51200, 102400) | `number` | `10240` | no |
+| <a name="input_disk_replica_pair_description"></a> [disk\_replica\_pair\_description](#input\_disk\_replica\_pair\_description) | The description of the disk replica pair | `string` | `"Disk replica pair created by Terraform"` | no |
+| <a name="input_disk_replica_pair_destination_disk_id"></a> [disk\_replica\_pair\_destination\_disk\_id](#input\_disk\_replica\_pair\_destination\_disk\_id) | The destination disk ID for the replica pair | `string` | `""` | no |
+| <a name="input_disk_replica_pair_name"></a> [disk\_replica\_pair\_name](#input\_disk\_replica\_pair\_name) | The name of the disk replica pair | `string` | `"example-disk-replica-pair"` | no |
+| <a name="input_disk_replica_pair_payment_type"></a> [disk\_replica\_pair\_payment\_type](#input\_disk\_replica\_pair\_payment\_type) | The payment type for the replica pair | `string` | `"POSTPAY"` | no |
+| <a name="input_disk_replica_pair_rpo"></a> [disk\_replica\_pair\_rpo](#input\_disk\_replica\_pair\_rpo) | The RPO (Recovery Point Objective) for the replica pair | `number` | `900` | no |
+| <a name="input_disk_replica_pair_source_disk_id"></a> [disk\_replica\_pair\_source\_disk\_id](#input\_disk\_replica\_pair\_source\_disk\_id) | The source disk ID for the replica pair | `string` | `""` | no |
+| <a name="input_enable_disk_replica_pair"></a> [enable\_disk\_replica\_pair](#input\_enable\_disk\_replica\_pair) | Whether to create a disk replica pair | `bool` | `true` | no |
+| <a name="input_enable_replica_group"></a> [enable\_replica\_group](#input\_enable\_replica\_group) | Whether to create a disk replica group | `bool` | `true` | no |
+| <a name="input_enable_snapshot_policy"></a> [enable\_snapshot\_policy](#input\_enable\_snapshot\_policy) | Whether to create an enterprise snapshot policy | `bool` | `true` | no |
+| <a name="input_enable_snapshot_policy_attachment"></a> [enable\_snapshot\_policy\_attachment](#input\_enable\_snapshot\_policy\_attachment) | Whether to create a snapshot policy attachment | `bool` | `true` | no |
+| <a name="input_enable_solution_instance"></a> [enable\_solution\_instance](#input\_enable\_solution\_instance) | Whether to create an EBS solution instance | `bool` | `true` | no |
+| <a name="input_name"></a> [name](#input\_name) | The name prefix for disk | `string` | `"tf-example"` | no |
+| <a name="input_region"></a> [region](#input\_region) | The Alicloud region where resources will be created | `string` | `"cn-hangzhou"` | no |
+| <a name="input_replica_group_name"></a> [replica\_group\_name](#input\_replica\_group\_name) | The name of the disk replica group | `string` | `"example-replica-group"` | no |
+| <a name="input_snapshot_cron_expression"></a> [snapshot\_cron\_expression](#input\_snapshot\_cron\_expression) | The cron expression for the snapshot schedule | `string` | `"0 0 2 * * ?"` | no |
+| <a name="input_snapshot_policy_attachment_disk_id"></a> [snapshot\_policy\_attachment\_disk\_id](#input\_snapshot\_policy\_attachment\_disk\_id) | The disk ID for the snapshot policy attachment | `string` | `""` | no |
+| <a name="input_snapshot_policy_name"></a> [snapshot\_policy\_name](#input\_snapshot\_policy\_name) | The name of the enterprise snapshot policy | `string` | `"example-snapshot-policy"` | no |
+| <a name="input_snapshot_retain_days"></a> [snapshot\_retain\_days](#input\_snapshot\_retain\_days) | The number of days to retain snapshots | `number` | `30` | no |
+| <a name="input_snapshot_retain_number"></a> [snapshot\_retain\_number](#input\_snapshot\_retain\_number) | The number of snapshots to retain | `number` | `10` | no |
+| <a name="input_solution_id"></a> [solution\_id](#input\_solution\_id) | The ID of the solution template | `string` | `""` | no |
+| <a name="input_solution_instance_name"></a> [solution\_instance\_name](#input\_solution\_instance\_name) | The name of the EBS solution instance | `string` | `"example-solution-instance"` | no |
+| <a name="input_solution_parameters"></a> [solution\_parameters](#input\_solution\_parameters) | The parameters for the solution instance | <pre>list(object({<br/>    parameter_key   = string<br/>    parameter_value = string<br/>  }))</pre> | <pre>[<br/>  {<br/>    "parameter_key": "zoneId",<br/>    "parameter_value": "cn-hangzhou-i"<br/>  },<br/>  {<br/>    "parameter_key": "ecsType",<br/>    "parameter_value": "ecs.c6.large"<br/>  }<br/>]</pre> | no |
+| <a name="input_tags"></a> [tags](#input\_tags) | An object of tags to assign to the resources | <pre>object({<br/>    Environment = string<br/>    ManagedBy   = string<br/>    Module      = string<br/>  })</pre> | <pre>{<br/>  "Environment": "example",<br/>  "ManagedBy": "Terraform",<br/>  "Module": "terraform-alicloud-ebs"<br/>}</pre> | no |
+
+## Outputs
+
+| Name | Description |
+|------|-------------|
+| <a name="output_cluster_available_capacity"></a> [cluster\_available\_capacity](#output\_cluster\_available\_capacity) | The available capacity of the EBS dedicated block storage cluster |
+| <a name="output_cluster_id"></a> [cluster\_id](#output\_cluster\_id) | The ID of the EBS dedicated block storage cluster |
+| <a name="output_cluster_name"></a> [cluster\_name](#output\_cluster\_name) | The name of the EBS dedicated block storage cluster |
+| <a name="output_cluster_status"></a> [cluster\_status](#output\_cluster\_status) | The status of the EBS dedicated block storage cluster |
+| <a name="output_cluster_used_capacity"></a> [cluster\_used\_capacity](#output\_cluster\_used\_capacity) | The used capacity of the EBS dedicated block storage cluster |
+| <a name="output_replica_group_id"></a> [replica\_group\_id](#output\_replica\_group\_id) | The ID of the EBS disk replica group |
+| <a name="output_replica_group_name"></a> [replica\_group\_name](#output\_replica\_group\_name) | The name of the EBS disk replica group |
+| <a name="output_snapshot_policy_id"></a> [snapshot\_policy\_id](#output\_snapshot\_policy\_id) | The ID of the EBS enterprise snapshot policy |
+| <a name="output_snapshot_policy_name"></a> [snapshot\_policy\_name](#output\_snapshot\_policy\_name) | The name of the EBS enterprise snapshot policy |
+| <a name="output_solution_instance_id"></a> [solution\_instance\_id](#output\_solution\_instance\_id) | The ID of the EBS solution instance |
+| <a name="output_solution_instance_name"></a> [solution\_instance\_name](#output\_solution\_instance\_name) | The name of the EBS solution instance |
+| <a name="output_solution_instance_status"></a> [solution\_instance\_status](#output\_solution\_instance\_status) | The status of the EBS solution instance |
+| <a name="output_this_cluster_id"></a> [this\_cluster\_id](#output\_this\_cluster\_id) | The ID of the EBS cluster (created or external) |
+| <a name="output_this_replica_group_id"></a> [this\_replica\_group\_id](#output\_this\_replica\_group\_id) | The ID of the EBS replica group (created or external) |
+| <a name="output_this_snapshot_policy_id"></a> [this\_snapshot\_policy\_id](#output\_this\_snapshot\_policy\_id) | The ID of the EBS snapshot policy (created or external) |
+<!-- END_TF_DOCS -->
